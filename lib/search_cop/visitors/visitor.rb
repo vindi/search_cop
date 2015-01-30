@@ -77,6 +77,7 @@ module SearchCop
       alias :visit_SearchCopGrammar_Attributes_Date :visit_attribute
       alias :visit_SearchCopGrammar_Attributes_Time :visit_attribute
       alias :visit_SearchCopGrammar_Attributes_Boolean :visit_attribute
+      alias :visit_SearchCopGrammar_Attributes_Enumerated :visit_attribute
 
       def quote(value)
         connection.quote value

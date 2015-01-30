@@ -14,6 +14,7 @@ end
 require "minitest/autorun"
 require "active_record"
 require "factory_girl"
+require "enumerize"
 require "yaml"
 
 DATABASE = ENV["DATABASE"] || "sqlite"
@@ -24,12 +25,17 @@ class User < ActiveRecord::Base; end
 
 class Comment < ActiveRecord::Base
   include SearchCop
+  extend Enumerize
 
   belongs_to :user
 
+  enumerize :state, in: {:new => 1, :approved => 2, :rejected => 3}, default: :new
+
   search_scope :search do
     attributes :user => "user.username"
-    attributes :title, :message
+    attributes :title, :message, :state
+
+    options :state, :enumerator => Comment.state
   end
 end
 
@@ -103,6 +109,7 @@ ActiveRecord::Base.connection.create_table :comments do |t|
   t.references :user
   t.string :title
   t.text :message
+  t.integer :state
 end
 
 ActiveRecord::Base.connection.create_table :users do |t|

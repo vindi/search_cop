@@ -86,7 +86,9 @@ module SearchCopGrammar
 
         raise(SearchCop::UnknownAttribute, "Unknown attribute #{attribute_definition}") unless klass.columns_hash[column]
 
-        Attributes.const_get(klass.columns_hash[column].type.to_s.classify).new(klass, alias_for(table), column, options)
+        option_klass = Enumerated.to_s if options && options[:enumerator].is_a?(::Enumerize::Attribute)
+
+        Attributes.const_get(option_klass || klass.columns_hash[column].type.to_s.classify).new(klass, alias_for(table), column, options)
       end
     end
 
@@ -245,6 +247,16 @@ module SearchCopGrammar
         return false if value.to_s =~ /^(0|false|no)$/i
 
         raise SearchCop::IncompatibleDatatype, "Incompatible datatype for #{value}"
+      end
+    end
+
+    class Enumerated < WithoutMatches
+      def map(value)
+        if enumerator_value = @options[:enumerator].find_value(value)
+          enumerator_value.value
+        else
+          raise SearchCop::IncompatibleDatatype, "Incompatible datatype for #{value}"
+        end
       end
     end
   end
