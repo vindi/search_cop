@@ -156,6 +156,10 @@ class SearchCop::TestCase
     assert value
   end
 
+  def assert_nothing_raised
+    yield
+  end
+
   def quote_table_name(name)
     ActiveRecord::Base.connection.quote_table_name name
   end
