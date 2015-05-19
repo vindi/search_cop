@@ -181,16 +181,19 @@ module SearchCopGrammar
         return value .. value unless value.is_a?(::String)
 
         if value =~ /^[0-9]{4}$/
-          ::Time.new(value).beginning_of_year .. ::Time.new(value).end_of_year
+          time = ::Time.zone.parse("#{value}-01-01")
+          time.beginning_of_year .. time.end_of_year
         elsif value =~ /^([0-9]{4})(\.|-|\/)([0-9]{1,2})$/
-          ::Time.new($1, $3, 15).beginning_of_month .. ::Time.new($1, $3, 15).end_of_month
+          time = ::Time.zone.parse("#{$1}-#{$3}-15")
+          time.beginning_of_month .. time.end_of_month
         elsif value =~ /^([0-9]{1,2})(\.|-|\/)([0-9]{4})$/
-          ::Time.new($3, $1, 15).beginning_of_month .. ::Time.new($3, $1, 15).end_of_month
+          time = ::Time.zone.parse("#{$3}-#{$1}-15")
+          time.beginning_of_month .. time.end_of_month
         elsif value =~ /^[0-9]{4}(\.|-|\/)[0-9]{1,2}(\.|-|\/)[0-9]{1,2}$/ || value =~ /^[0-9]{1,2}(\.|-|\/)[0-9]{1,2}(\.|-|\/)[0-9]{4}$/
-          time = ::Time.parse(value)
+          time = ::Time.zone.parse(value)
           time.beginning_of_day .. time.end_of_day
         elsif value =~ /[0-9]{4}(\.|-|\/)[0-9]{1,2}(\.|-|\/)[0-9]{1,2}/ || value =~ /[0-9]{1,2}(\.|-|\/)[0-9]{1,2}(\.|-|\/)[0-9]{4}/
-          time = ::Time.parse(value)
+          time = ::Time.zone.parse(value)
           time .. time
         else
           raise ArgumentError

@@ -21,6 +21,8 @@ DATABASE = ENV["DATABASE"] || "sqlite"
 
 ActiveRecord::Base.establish_connection YAML.load_file(File.expand_path("../database.yml", __FILE__))[DATABASE]
 
+Time.zone = 'UTC'
+
 class User < ActiveRecord::Base; end
 
 class Comment < ActiveRecord::Base
