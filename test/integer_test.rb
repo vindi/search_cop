@@ -23,6 +23,13 @@ class IntegerTest < SearchCop::TestCase
     refute_includes Product.search("stock = 0"), product
   end
 
+  def test_negative_equals
+    product = create(:product, :stock => -1)
+
+    assert_includes Product.search("stock = -1"), product
+    refute_includes Product.search("stock = 0"), product
+  end
+
   def test_equals_not
     product = create(:product, :stock => 1)
 
@@ -49,6 +56,13 @@ class IntegerTest < SearchCop::TestCase
 
     assert_includes Product.search("stock < 2"), product
     refute_includes Product.search("stock < 1"), product
+  end
+
+  def test_negative_less
+    product = create(:product, :stock => -2)
+
+    assert_includes Product.search("stock < -1"), product
+    refute_includes Product.search("stock < -2"), product
   end
 
   def test_less_equals
