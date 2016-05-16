@@ -76,6 +76,20 @@ class DatetimeTest < SearchCop::TestCase
     end
   end
 
+  def test_nil
+    product = create(:product, :available_at => nil)
+
+    assert_includes Product.search("available_at = null"), product
+    refute_includes Product.search("available_at != null"), product
+  end
+
+  def test_not_nil
+    product = create(:product, :available_at => Time.zone.parse("2014-05-02"))
+
+    assert_includes Product.search("available_at != null"), product
+    refute_includes Product.search("available_at = null"), product
+  end
+
   def test_incompatible_datatype
     assert_raises SearchCop::IncompatibleDatatype do
       Product.unsafe_search "created_at: Value"

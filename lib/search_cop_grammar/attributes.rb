@@ -190,7 +190,9 @@ module SearchCopGrammar
       def parse(value)
         return value .. value unless value.is_a?(::String)
 
-        if value =~ /^[0-9]{4}$/
+        if value.to_s =~ /^null$/
+          nil
+        elsif value =~ /^[0-9]{4}$/
           time = ::Time.zone.parse("#{value}-01-01")
           time.beginning_of_year .. time.end_of_year
         elsif value =~ /^([0-9]{4})(\.|-|\/)([0-9]{1,2})$/
@@ -213,15 +215,21 @@ module SearchCopGrammar
       end
 
       def map(value)
-        parse(value).first
+        if value.to_s =~ /^null$/
+          nil
+        else
+          parse(value).first
+        end
       end
 
       def eq(value)
-        between parse(value)
+        parsed_value = parse(value)
+        parsed_value ? between(parsed_value) : super(nil)
       end
 
       def not_eq(value)
-        between(parse(value)).not
+        parsed_value = parse(value)
+        parsed_value ? between(parsed_value).not : super(nil)
       end
 
       def gt(value)
@@ -239,7 +247,9 @@ module SearchCopGrammar
       def parse(value)
         return value .. value unless value.is_a?(::String)
 
-        if value =~ /^[0-9]{4}$/
+        if value.to_s =~ /^null$/
+          nil
+        elsif value =~ /^[0-9]{4}$/
           ::Date.new(value.to_i).beginning_of_year .. ::Date.new(value.to_i).end_of_year
         elsif value =~ /^([0-9]{4})(\.|-|\/)([0-9]{1,2})$/
           ::Date.new($1.to_i, $3.to_i, 15).beginning_of_month .. ::Date.new($1.to_i, $3.to_i, 15).end_of_month

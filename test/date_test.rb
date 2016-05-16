@@ -66,6 +66,20 @@ class DateTest < SearchCop::TestCase
     refute_includes Product.search("created_on <= 2014-05-01"), product
   end
 
+  def test_nil
+    product = create(:product, :available_on => nil)
+
+    assert_includes Product.search("available_on = null"), product
+    refute_includes Product.search("available_on != null"), product
+  end
+
+  def test_not_nil
+    product = create(:product, :available_on => Date.parse("2014-05-02"))
+
+    assert_includes Product.search("available_on != null"), product
+    refute_includes Product.search("available_on = null"), product
+  end
+
   def test_no_overflow
     assert_nothing_raised do
       Product.search("created_on: 1000000").to_a

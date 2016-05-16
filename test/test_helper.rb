@@ -45,7 +45,7 @@ class Product < ActiveRecord::Base
   include SearchCop
 
   search_scope :search do
-    attributes :title, :description, :brand, :notice, :stock, :price, :created_at, :created_on, :available
+    attributes :title, :description, :brand, :notice, :stock, :price, :created_at, :created_on, :available, :available_at, :available_on
     attributes :comment => ["comments.title", "comments.message"], :user => ["users.username", "users_products.username"]
     attributes :primary => [:title, :description]
 
@@ -104,6 +104,8 @@ ActiveRecord::Base.connection.create_table :products do |t|
   t.boolean :available
   t.string :brand
   t.string :notice
+  t.datetime :available_at
+  t.date :available_on
 end
 
 ActiveRecord::Base.connection.create_table :comments do |t|
