@@ -186,6 +186,18 @@ module SearchCopGrammar
 
     class Decimal < Float; end
 
+    class Uuid < Base
+      def parse(value)
+        UUIDTools::UUID.parse(value)
+      rescue ArgumentError
+        raise SearchCop::IncompatibleDatatype, "Incompatible datatype for #{value}"
+      end
+
+      def map(value)
+        parse(value)
+      end
+    end
+
     class Datetime < WithoutMatches
       def parse(value)
         return value .. value unless value.is_a?(::String)
@@ -288,4 +300,3 @@ module SearchCopGrammar
     end
   end
 end
-

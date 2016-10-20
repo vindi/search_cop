@@ -86,6 +86,7 @@ module SearchCop
       alias :visit_SearchCopGrammar_Attributes_Time :visit_attribute
       alias :visit_SearchCopGrammar_Attributes_Boolean :visit_attribute
       alias :visit_SearchCopGrammar_Attributes_Enumerated :visit_attribute
+      alias :visit_SearchCopGrammar_Attributes_Uuid :visit_attribute
 
       def quote(value)
         connection.quote value
@@ -99,7 +100,7 @@ module SearchCop
       alias :visit_Float :quote
       alias :visit_Fixnum :quote
       alias :visit_Symbol :quote
+      alias :visit_UUIDTools_UUID :quote
     end
   end
 end
-
