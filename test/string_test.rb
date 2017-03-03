@@ -40,10 +40,20 @@ class StringTest < SearchCop::TestCase
   end
 
   def test_includes_without_left_wildcard
-    expected = create(:product, :brand => "Brand")
+    expected = create(:product, :brand => "Brand expected")
     rejected = create(:product, :brand => "Rejected brand")
 
     results = with_options(Product.search_scopes[:search], :brand, :left_wildcard => false) { Product.search "brand: Brand" }
+
+    assert_includes results, expected
+    refute_includes results, rejected
+  end
+
+  def test_includes_without_wildcards
+    expected = create(:product, :brand => "Brand")
+    rejected = create(:product, :brand => "Brand rejected")
+
+    results = with_options(Product.search_scopes[:search], :brand, :wildcards => false) { Product.search "brand: Brand" }
 
     assert_includes results, expected
     refute_includes results, rejected

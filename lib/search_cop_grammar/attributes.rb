@@ -144,7 +144,11 @@ module SearchCopGrammar
       end
 
       def matches(value)
-        super matches_value(value)
+        if options[:wildcards] == false
+          eq value
+        else
+          super matches_value(value)
+        end
       end
     end
 
