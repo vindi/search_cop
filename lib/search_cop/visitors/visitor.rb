@@ -95,6 +95,7 @@ module SearchCop
       alias :visit_TrueClass :quote
       alias :visit_FalseClass :quote
       alias :visit_String :quote
+      alias :visit_Integer :quote
       alias :visit_Time :quote
       alias :visit_Date :quote
       alias :visit_Float :quote
